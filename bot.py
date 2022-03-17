@@ -1,13 +1,18 @@
-import sqlite3
+from tokenize import Name
+import psycopg2
 import telebot
 from datetime import datetime, timedelta
 from telebot import types
 
+from config import DB_URI
+
 
 bot = telebot.TeleBot("5061949277:AAFhKaHQzLrrE0SKuARQtEHjFVXmr0y7EDw")
 
-conn = sqlite3.connect('C:\project\database.db', check_same_thread=False)
-cursor = conn.cursor()
+db_connection = psycopg2.connect(DB_URI, sslmode="require")
+db_object = db_connection.cursor()
+
+
 date = datetime.now()
 
 @bot.message_handler(commands=['start'])
@@ -24,17 +29,23 @@ def start_message(message):
 def handle_text(message):
     if message.text == "сегодня":
         bot.send_message(message.chat.id, 'Сегодня день рождения:')
-        sql = "SELECT username FROM test WHERE birthday=?"
-        for all in cursor.execute(sql, [date.strftime("%d-%m")]):
-            bot.send_message(message.chat.id, all)  
+        dates = str(date.strftime("%Y-%m-%d"))
+        
+        db_object.execute(f"SELECT username FROM users WHERE birthday = '{dates}'")
+        all = db_object.fetchall()
+
+        bot.send_message(message.chat.id, all)
+              
     if message.text == "когда":
         ms=bot.send_message(message.chat.id, 'Введитe имя, например Новиков Егор')
         bot.register_next_step_handler(ms, name)
 def name(message):
     name = message.text
-    sql = "SELECT birthday FROM test WHERE username LIKE ?"
-    for all in cursor.execute(sql, [name]):
-        bot.send_message(message.chat.id, all)  
+    db_object.execute(f"SELECT birthday FROM users WHERE username = '{name}'")
+    all = db_object.fetchall()
+    
+    bot.send_message(message.chat.id, all)  
+    
     
           
         

@@ -9,7 +9,7 @@ from config import DB_URI
 
 bot = telebot.TeleBot("5061949277:AAFhKaHQzLrrE0SKuARQtEHjFVXmr0y7EDw")
 
-db_connection = psycopg2.connect(DB_URI, sslmode="require")
+db_connection = psycopg2.connect("postgres://ewyrrnbobbxezv:774643bf630642ef7ce029b7eb25c30fadea47f258c84067b083d4450ba71d90@ec2-54-155-5-151.eu-west-1.compute.amazonaws.com:5432/d996k5crr82vob")
 db_object = db_connection.cursor()
 
 

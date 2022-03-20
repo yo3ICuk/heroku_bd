@@ -20,8 +20,8 @@ def start_message(message):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     btn1 = types.KeyboardButton("СЕГОДНЯ")
     btn2 = types.KeyboardButton("КОГДА")
-    btn3 = types.KeyboardButton("ЗАВТРА")
-    markup.add(btn1, btn2, btn3)    
+    
+    markup.add(btn1, btn2)    
     mesg1 = bot.send_message(message.chat.id, 'Привет, ' + message.from_user.first_name + '.\n'
     'На связи Егор Новиков')
     mesg2 = bot.send_message(message.chat.id, 'Если ты тут и читаешь это сообщение, значит всё круто.\n'
@@ -29,7 +29,6 @@ def start_message(message):
     mesg3 = bot.send_message(message.chat.id, 'Чат-бот будет напоминать тебе о днях рождения твоих одноклассников и учителей.\n'
     '\n'
     'Кто сегодня празднует День Р и ждёт поздравления - жми СЕГОДНЯ\n'
-    'Кто празднует день рождения завтра - жми ЗАВТРА\n'
     '\n'
     'Когда у твоих друзей День Р - жми КОГДА')
     mesg4 = bot.send_message(message.chat.id, "Продолжая, ты соглашаешься с политикой конфиденциальности http://www.consultant.ru/document/cons_doc_LAW_61801/", reply_markup=markup)
@@ -46,14 +45,9 @@ def handle_text(message):
         all = db_object.fetchall()
 
         bot.send_message(message.chat.id, all)
-   if message.text == "ЗАВТРА":
-        bot.send_message(message.chat.id, 'Завтра день рождения:')
-        future_dates = datetime.datetime.today() + datetime.timedelta(days=1)
-        future_date = str(future_dates.strftime("%Y-%m-%d"))
-        db_object.execute(f"SELECT username FROM users WHERE birthday = '{future_date}'")
-        all = db_object.fetchall()
+  
 
-        bot.send_message(message.chat.id, all)          
+                 
    if message.text == "КОГДА":
         ms=bot.send_message(message.chat.id, 'Введитe имя, например Новиков Егор')
         bot.register_next_step_handler(ms, name)

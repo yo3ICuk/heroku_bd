@@ -13,7 +13,7 @@ db_connection = psycopg2.connect("postgres://ewyrrnbobbxezv:774643bf630642ef7ce0
 db_object = db_connection.cursor()
 
 
-date = datetime.now()
+
 
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -37,6 +37,7 @@ def start_message(message):
 def handle_text(message):
     if message.text == "СЕГОДНЯ":
         bot.send_message(message.chat.id, 'Сегодня день рождения:')
+        date = datetime.now()
         dates = str(date.strftime("%Y-%m-%d"))
         
         db_object.execute(f"SELECT username FROM users WHERE birthday = '{dates}'")

@@ -46,8 +46,15 @@ def handle_text(message):
         all = db_object.fetchall()
 
         bot.send_message(message.chat.id, all)
-              
-    if message.text == "КОГДА":
+   if message.text == "ЗАВТРА":
+        bot.send_message(message.chat.id, 'Завтра день рождения:')
+        future_dates = datetime.datetime.today() + datetime.timedelta(days=1)
+        future_date = str(future_dates.strftime("%Y-%m-%d"))
+        db_object.execute(f"SELECT username FROM users WHERE birthday = '{future_date}'")
+        all = db_object.fetchall()
+
+        bot.send_message(message.chat.id, all)          
+   if message.text == "КОГДА":
         ms=bot.send_message(message.chat.id, 'Введитe имя, например Новиков Егор')
         bot.register_next_step_handler(ms, name)
 def name(message):
@@ -56,14 +63,7 @@ def name(message):
     all = db_object.fetchall()
     
     bot.send_message(message.chat.id, all)  
-    if message.text == "ЗАВТРА":
-        bot.send_message(message.chat.id, 'Завтра день рождения:')
-        future_dates = datetime.datetime.today() + datetime.timedelta(days=1)
-        future_date = str(future_dates.strftime("%Y-%m-%d"))
-        db_object.execute(f"SELECT username FROM users WHERE birthday = '{future_date}'")
-        all = db_object.fetchall()
-
-        bot.send_message(message.chat.id, all)
+    
     
           
         
